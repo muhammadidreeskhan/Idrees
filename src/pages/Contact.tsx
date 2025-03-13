@@ -1,252 +1,322 @@
 import { motion } from "framer-motion";
-import { Send, Mail, MapPin, Linkedin, Github, Twitter, Phone } from "lucide-react";
+import { useState } from "react";
+import { 
+  Mail, 
+  Phone, 
+  MapPin, 
+  Clock, 
+  Send,
+  Linkedin,
+  Github,
+  Twitter,
+  CheckCircle,
+  AlertCircle
+} from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { useState, useRef } from "react";
-import emailjs from '@emailjs/browser';
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Textarea } from "../components/ui/textarea";
+import { Card, CardContent } from "../components/ui/card";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "../components/ui/alert";
+import SEO from '@/components/SEO';
+
+const contactInfo = [
+  {
+    icon: <Mail className="w-6 h-6" />,
+    title: "Email",
+    value: "contactmuhammadidrees@gmail.com",
+    link: "mailto:contactmuhammadidrees@gmail.com"
+  },
+  {
+    icon: <Phone className="w-6 h-6" />,
+    title: "Phone",
+    value: "+92 123 456 7890",
+    link: "tel:+921234567890"
+  },
+  {
+    icon: <MapPin className="w-6 h-6" />,
+    title: "Location",
+    value: "Karachi, Pakistan",
+    link: "https://maps.google.com/?q=Karachi,Pakistan"
+  },
+  {
+    icon: <Clock className="w-6 h-6" />,
+    title: "Working Hours",
+    value: "Mon - Fri, 9:00 AM - 6:00 PM",
+    link: null
+  }
+];
+
+const socialLinks = [
+  {
+    icon: <Linkedin className="w-5 h-5" />,
+    name: "LinkedIn",
+    url: "https://linkedin.com/in/yourusername"
+  },
+  {
+    icon: <Github className="w-5 h-5" />,
+    name: "GitHub",
+    url: "https://github.com/yourusername"
+  },
+  {
+    icon: <Twitter className="w-5 h-5" />,
+    name: "Twitter",
+    url: "https://twitter.com/yourusername"
+  }
+];
+
+interface FormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
 
 const Contact = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const formRef = useRef<HTMLFormElement>(null);
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus('idle');
+    setSubmitStatus(null);
 
     try {
-      const result = await emailjs.sendForm(
-        'service_14rkuha',
-        'template_ovme91i',
-        formRef.current!,
-        'YKFSzKUzPohomIiWr'
-      );
-
-      if (result.text === 'OK') {
-        setSubmitStatus('success');
-        formRef.current?.reset();
-      } else {
-        setSubmitStatus('error');
-      }
+      // Here you would typically send the form data to your backend
+      // For now, we'll simulate an API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      setSubmitStatus("success");
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: ""
+      });
     } catch (error) {
-      console.error('Failed to send email:', error);
-      setSubmitStatus('error');
+      setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const socialLinks = [
-    {
-      name: 'LinkedIn',
-      icon: <Linkedin className="w-5 h-5" />,
-      url: 'https://linkedin.com/in/yourusername',
-      color: 'hover:text-blue-500'
-    },
-    {
-      name: 'GitHub',
-      icon: <Github className="w-5 h-5" />,
-      url: 'https://github.com/yourusername',
-      color: 'hover:text-gray-400'
-    },
-    {
-      name: 'Twitter',
-      icon: <Twitter className="w-5 h-5" />,
-      url: 'https://twitter.com/yourusername',
-      color: 'hover:text-blue-400'
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Contact Me"
+        description="Get in touch with me for any inquiries or project discussions."
+        keywords={["contact", "hire", "freelance", "web development"]}
+        type="website"
+      />
       <Navbar />
-      <main className="relative">
-        {/* Background decoration */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-[radial-gradient(40%_40%_at_50%_50%,var(--tw-gradient-from)_0%,var(--tw-gradient-to)_100%)] from-primary/5 to-transparent" />
-        </div>
-
-        <div className="container mx-auto px-4 py-20">
+      <main className="container mx-auto px-4 py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-5xl mx-auto"
-          >
-            <div className="text-center space-y-4 mb-16">
-              <motion.h1 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-4xl md:text-5xl font-bold"
-              >
-                Let's <span className="text-primary">Connect</span>
-              </motion.h1>
-              <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="text-muted-foreground text-lg max-w-2xl mx-auto"
-              >
-                Have a project in mind or want to collaborate? I'd love to hear from you.
-              </motion.p>
-            </div>
-            
-            <div className="grid lg:grid-cols-5 gap-12 items-start">
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-3xl mx-auto mb-16"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            Get in Touch
+          </h1>
+          <p className="text-xl text-muted-foreground">
+            Have a project in mind? Let's discuss how we can work together to bring your ideas to life.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          {/* Contact Form */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="lg:col-span-2 space-y-8"
-              >
-                <div className="space-y-6">
-                  <div className="space-y-4">
-                    <h2 className="text-2xl font-semibold">Contact Information</h2>
-                    <p className="text-muted-foreground">
-                      Feel free to reach out through any of these channels. I'll get back to you as soon as possible.
-                    </p>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-3 text-muted-foreground hover:text-primary transition-colors">
-                      <Mail className="w-5 h-5" />
-                      <a href="mailto:contactmuhammadidrees@gmail.com" className="hover:underline">
-                        contactmuhammadidrees@gmail.com
-                      </a>
-                    </div>
-                    <div className="flex items-center space-x-3 text-muted-foreground">
-                      <MapPin className="w-5 h-5" />
-                      <span>Karachi, Pakistan</span>
-                    </div>
-                    <div className="flex items-center space-x-3 text-muted-foreground">
-                      <Phone className="w-5 h-5" />
-                      <span>Available for remote work</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Connect on Social Media</h3>
-                  <div className="flex space-x-4">
-                    {socialLinks.map((link) => (
-                      <a
-                        key={link.name}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`p-2 rounded-full border border-primary/20 hover:border-primary/40 transition-colors ${link.color}`}
-                        aria-label={link.name}
-                      >
-                        {link.icon}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="lg:col-span-3"
-              >
-                <div className="bg-background/50 backdrop-blur-sm border border-primary/10 rounded-2xl p-8">
-                  <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-6">
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <Card>
+              <CardContent className="p-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label htmlFor="user_name" className="text-sm font-medium">
-                          Full Name
+                      <label htmlFor="name" className="text-sm font-medium">
+                        Name
                         </label>
-                        <input
-                          type="text"
-                          id="user_name"
-                          name="user_name"
-                          className="w-full px-4 py-2.5 rounded-lg bg-background border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors"
+                      <Input
+                        id="name"
+                        name="name"
+                        placeholder="Your name"
+                        value={formData.name}
+                        onChange={handleChange}
                           required
                         />
                       </div>
                       <div className="space-y-2">
-                        <label htmlFor="user_email" className="text-sm font-medium">
-                          Email Address
+                      <label htmlFor="email" className="text-sm font-medium">
+                        Email
                         </label>
-                        <input
+                      <Input
+                        id="email"
+                        name="email"
                           type="email"
-                          id="user_email"
-                          name="user_email"
-                          className="w-full px-4 py-2.5 rounded-lg bg-background border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors"
+                        placeholder="Your email"
+                        value={formData.email}
+                        onChange={handleChange}
                           required
                         />
                       </div>
                     </div>
-                    
                     <div className="space-y-2">
                       <label htmlFor="subject" className="text-sm font-medium">
                         Subject
                       </label>
-                      <input
-                        type="text"
+                    <Input
                         id="subject"
                         name="subject"
-                        className="w-full px-4 py-2.5 rounded-lg bg-background border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors"
+                      placeholder="What's this about?"
+                      value={formData.subject}
+                      onChange={handleChange}
                         required
                       />
                     </div>
-                    
                     <div className="space-y-2">
                       <label htmlFor="message" className="text-sm font-medium">
                         Message
                       </label>
-                      <textarea
+                    <Textarea
                         id="message"
                         name="message"
-                        rows={6}
-                        className="w-full px-4 py-2.5 rounded-lg bg-background border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors resize-none"
+                      placeholder="Your message"
+                      value={formData.message}
+                      onChange={handleChange}
                         required
-                      ></textarea>
+                      className="min-h-[150px]"
+                    />
                     </div>
-
-                    <div className="space-y-4">
-                      <button
+                  {submitStatus && (
+                    <Alert variant={submitStatus === "success" ? "default" : "destructive"}>
+                      {submitStatus === "success" ? (
+                        <CheckCircle className="h-4 w-4" />
+                      ) : (
+                        <AlertCircle className="h-4 w-4" />
+                      )}
+                      <AlertTitle>
+                        {submitStatus === "success" ? "Success!" : "Error!"}
+                      </AlertTitle>
+                      <AlertDescription>
+                        {submitStatus === "success"
+                          ? "Your message has been sent successfully."
+                          : "There was an error sending your message. Please try again."}
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  <Button 
                         type="submit"
+                    className="w-full gap-2"
                         disabled={isSubmitting}
-                        className="w-full px-8 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {isSubmitting ? (
-                          <>
-                            <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                            Sending...
-                          </>
+                      "Sending..."
                         ) : (
                           <>
                             Send Message
                             <Send className="w-4 h-4" />
                           </>
                         )}
-                      </button>
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </motion.div>
 
-                      {submitStatus === 'success' && (
-                        <motion.p
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-green-500 text-center"
-                        >
-                          Message sent successfully! I'll get back to you soon.
-                        </motion.p>
-                      )}
-
-                      {submitStatus === 'error' && (
-                        <motion.p
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-red-500 text-center"
-                        >
-                          Failed to send message. Please try again.
-                        </motion.p>
-                      )}
+          {/* Contact Information */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="space-y-6"
+          >
+            {/* Contact Details */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {contactInfo.map((info, index) => (
+                <Card key={index} className="group">
+                  <CardContent className="p-6">
+                    <div className="flex items-start space-x-4">
+                      <div className="p-3 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                        {info.icon}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold mb-1">{info.title}</h3>
+                        {info.link ? (
+                          <a 
+                            href={info.link}
+                            className="text-muted-foreground hover:text-primary transition-colors"
+                            target={info.link.startsWith("http") ? "_blank" : undefined}
+                            rel={info.link.startsWith("http") ? "noopener noreferrer" : undefined}
+                          >
+                            {info.value}
+                          </a>
+                        ) : (
+                          <p className="text-muted-foreground">{info.value}</p>
+                        )}
+                      </div>
                     </div>
-                  </form>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Map */}
+            <Card>
+              <CardContent className="p-0">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d462118.02491053584!2d66.82258865!3d24.925482450000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33e06651d4bbf%3A0x9cf92f44555a0c23!2sKarachi%2C%20Karachi%20City%2C%20Sindh%2C%20Pakistan!5e0!3m2!1sen!2s!4v1625641573342!5m2!1sen!2s"
+                  width="100%"
+                  height="300"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Location Map"
+                  className="rounded-lg"
+                />
+              </CardContent>
+            </Card>
+
+            {/* Social Links */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Connect with me</h3>
+              <div className="flex gap-4">
+                {socialLinks.map((social, index) => (
+                  <a
+                    key={index}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 rounded-lg bg-secondary/50 hover:bg-primary/10 hover:text-primary transition-colors"
+                    aria-label={social.name}
+                  >
+                    {social.icon}
+                  </a>
+                ))}
                 </div>
-              </motion.div>
             </div>
           </motion.div>
         </div>

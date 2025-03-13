@@ -3,13 +3,18 @@ export type Technology = {
   color: string;
 };
 
-export type Project = {
+export type ProjectCategory = "frontend" | "backend" | "fullstack" | "mobile";
+
+export interface Project {
+  id: number;
   title: string;
   description: string;
-  tech: Technology[];
+  longDescription: string;
   image: string;
-  liveUrl: string;
-  githubUrl: string;
-  category: 'frontend' | 'backend' | 'fullstack' | 'mobile';
-  featured?: boolean;
-};
+  screenshots: string[];
+  technologies: string[];
+  category: ProjectCategory;
+  liveUrl?: string;
+  githubUrl?: string;
+  featured: boolean;
+}

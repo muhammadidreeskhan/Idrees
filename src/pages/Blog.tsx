@@ -1,12 +1,17 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Calendar, Clock, Tag, ChevronRight } from 'lucide-react';
+import { Calendar, Clock, Tag, ChevronRight, Search, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import SEO from '../components/SEO';
 import OptimizedImage from '../components/OptimizedImage';
 import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Badge } from '../components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
+import { Separator } from '../components/ui/separator';
+import { toast } from 'sonner';
 
 interface BlogPost {
   id: string;
@@ -18,6 +23,7 @@ interface BlogPost {
   tags: string[];
   image: string;
   slug: string;
+  featured?: boolean;
 }
 
 const defaultImage = '/assets/images/placeholder.jpg';
@@ -90,7 +96,8 @@ Whether you're building a small project or an enterprise application, this guide
     readTime: '12 min read',
     tags: ['Next.js', 'React', 'Web Development', 'Performance', 'SEO', 'Server Components'],
     image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop',
-    slug: 'nextjs-14-vs-react-comparison'
+    slug: 'nextjs-14-vs-react-comparison',
+    featured: true
   },
   {
     id: '2',
@@ -165,7 +172,8 @@ Level up your TypeScript skills and write more maintainable, type-safe code that
     readTime: '15 min read',
     tags: ['TypeScript', 'JavaScript', 'Web Development', 'Programming', 'Type Safety', 'Development'],
     image: 'https://images.unsplash.com/photo-1516116216624-53e697fedbea?q=80&w=1000&auto=format&fit=crop',
-    slug: 'mastering-typescript-essential-tips'
+    slug: 'mastering-typescript-essential-tips',
+    featured: true
   },
   {
     id: '3',
@@ -240,7 +248,8 @@ Stay ahead of the curve by mastering these AI-powered development tools and tech
     readTime: '12 min read',
     tags: ['AI', 'Web Development', 'Automation', 'Future Tech', 'GitHub Copilot', 'ChatGPT', 'Development Tools'],
     image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1000&auto=format&fit=crop',
-    slug: 'ai-powered-web-development-2024'
+    slug: 'ai-powered-web-development-2024',
+    featured: true
   },
   {
     id: '4',
@@ -315,7 +324,8 @@ Transform your React applications into high-performance masterpieces with these 
     readTime: '15 min read',
     tags: ['React', 'Performance', 'Optimization', 'Web Development', 'JavaScript', 'Server Components', 'State Management'],
     image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=1000&auto=format&fit=crop',
-    slug: 'high-performance-react-applications'
+    slug: 'high-performance-react-applications',
+    featured: true
   },
   {
     id: '5',
@@ -390,22 +400,47 @@ Learn how to create inclusive web experiences that work for everyone, regardless
     readTime: '14 min read',
     tags: ['Accessibility', 'Web Development', 'UX', 'WCAG', 'A11y', 'Inclusive Design', 'User Experience'],
     image: 'https://images.unsplash.com/photo-1517292987719-0369a794ec0f?q=80&w=1000&auto=format&fit=crop',
-    slug: 'complete-web-accessibility-guide'
+    slug: 'complete-web-accessibility-guide',
+    featured: true
   }
 ];
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
 
+  // Get featured posts (posts marked as featured or the latest 2 posts)
+  const featuredPosts = blogPosts
+    .filter(post => post.featured)
+    .slice(0, 2);
+
+  // Get all unique categories from posts
+  const categories = Array.from(new Set(blogPosts.map(post => {
+    const firstTag = post.tags[0]; // Using first tag as category
+    return firstTag;
+  })));
+
+  // Get all unique tags
+  const allTags = Array.from(new Set(blogPosts.flatMap(post => post.tags)));
+
+  // Filter posts based on search term, tag, and category
   const filteredPosts = blogPosts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesTag = !selectedTag || post.tags.includes(selectedTag);
-    return matchesSearch && matchesTag;
+    const matchesCategory = !selectedCategory || post.tags[0] === selectedCategory;
+    return matchesSearch && matchesTag && matchesCategory;
   });
 
-  const allTags = Array.from(new Set(blogPosts.flatMap(post => post.tags)));
+  // Handle newsletter subscription
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Add your newsletter subscription logic here
+    toast.success('Thank you for subscribing to our newsletter!');
+    setEmail('');
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -414,7 +449,8 @@ const Blog = () => {
         description="Explore our latest articles about web development, design, and technology."
       />
       <Navbar />
-      <motion.main 
+      
+      <motion.main
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -426,16 +462,78 @@ const Blog = () => {
             Explore articles about web development, design, and technology
           </p>
         </div>
-        <div className="mb-8">
-          <input
-            type="text"
-            placeholder="Search articles..."
-            className="w-full max-w-md px-4 py-2 rounded-lg border border-border bg-background"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          
-          <div className="flex flex-wrap gap-2 mt-4">
+
+        {/* Featured Posts Section */}
+        {featuredPosts.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-6">Featured Posts</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {featuredPosts.map(post => (
+                <Card key={post.id} className="group hover:shadow-lg transition-shadow duration-300">
+                  <Link to={`/blog/${post.slug}`}>
+                    <OptimizedImage
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-64 object-cover rounded-t-lg"
+                    />
+                    <CardContent className="p-6">
+                      <Badge className="mb-4" variant="secondary">Featured</Badge>
+                      <CardTitle className="text-xl mb-2 group-hover:text-primary transition-colors">
+                        {post.title}
+                      </CardTitle>
+                      <CardDescription className="mb-4">{post.excerpt}</CardDescription>
+                      <div className="flex items-center justify-between text-sm text-muted-foreground">
+                        <div className="flex items-center">
+                          <Calendar className="mr-2 h-4 w-4" />
+                          {post.date}
+                        </div>
+                        <div className="flex items-center">
+                          <Clock className="mr-2 h-4 w-4" />
+                          {post.readTime}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Link>
+                </Card>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Search and Filters Section */}
+        <section className="mb-8 bg-card rounded-lg p-6 border border-border">
+          <div className="flex flex-col md:flex-row gap-4 mb-6">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Search articles..."
+                className="pl-10"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                >
+                  <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                </button>
+              )}
+            </div>
+            <select
+              className="px-4 py-2 rounded-lg border border-border bg-background"
+              value={selectedCategory || ''}
+              onChange={(e) => setSelectedCategory(e.target.value || null)}
+            >
+              <option value="">All Categories</option>
+              {categories.map(category => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
             {allTags.map(tag => (
               <Button
                 key={tag}
@@ -449,55 +547,87 @@ const Blog = () => {
               </Button>
             ))}
           </div>
-        </div>
+        </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Newsletter Section */}
+        <section className="mb-12 bg-primary/5 rounded-lg p-8 border border-primary/10">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-2xl font-semibold mb-4">Subscribe to Our Newsletter</h2>
+            <p className="text-muted-foreground mb-6">
+              Get the latest articles and tech insights delivered to your inbox.
+            </p>
+            <form onSubmit={handleSubscribe} className="flex gap-2">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="flex-1"
+              />
+              <Button type="submit">Subscribe</Button>
+            </form>
+          </div>
+        </section>
+
+        {/* Blog Posts Grid */}
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {filteredPosts.map(post => (
             <motion.article
               key={post.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="flex flex-col bg-card rounded-lg overflow-hidden border border-border"
+              className="group"
             >
-              <OptimizedImage
-                src={post.image}
-                alt={post.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6 flex flex-col flex-grow">
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {post.tags.map(tag => (
-                    <span
-                      key={tag}
-                      className="px-2 py-1 text-xs rounded-full bg-primary/10"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
-                <p className="text-muted-foreground mb-4 flex-grow">{post.excerpt}</p>
-                <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                  <div className="flex items-center">
-                    <Calendar className="mr-2 h-4 w-4" />
-                    {post.date}
-                  </div>
-                  <div className="flex items-center">
-                    <Clock className="mr-2 h-4 w-4" />
-                    {post.readTime}
-                  </div>
-                </div>
-                <Link to={`/blog/${post.slug}`} className="mt-auto">
-                  <Button className="w-full">
-                    Read More
-                    <ChevronRight className="ml-2 h-4 w-4" />
-                  </Button>
+              <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                <Link to={`/blog/${post.slug}`}>
+                  <OptimizedImage
+                    src={post.image}
+                    alt={post.title}
+                    className="w-full h-48 object-cover rounded-t-lg"
+                  />
+                  <CardContent className="p-6">
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {post.tags.map(tag => (
+                        <Badge
+                          key={tag}
+                          variant="secondary"
+                          className="bg-primary/10 hover:bg-primary/20"
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                    <CardTitle className="text-xl mb-2 group-hover:text-primary transition-colors">
+                      {post.title}
+                    </CardTitle>
+                    <CardDescription className="mb-4">{post.excerpt}</CardDescription>
+                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <div className="flex items-center">
+                        <Calendar className="mr-2 h-4 w-4" />
+                        {post.date}
+                      </div>
+                      <div className="flex items-center">
+                        <Clock className="mr-2 h-4 w-4" />
+                        {post.readTime}
+                      </div>
+                    </div>
+                  </CardContent>
                 </Link>
-              </div>
+              </Card>
             </motion.article>
           ))}
-        </div>
+        </section>
+
+        {filteredPosts.length === 0 && (
+          <div className="text-center py-12">
+            <h3 className="text-xl font-semibold mb-2">No posts found</h3>
+            <p className="text-muted-foreground">
+              Try adjusting your search or filter criteria
+            </p>
+          </div>
+        )}
       </motion.main>
       <Footer />
     </div>
