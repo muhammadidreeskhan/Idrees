@@ -33,23 +33,24 @@ export default defineConfig(({ mode }) => ({
     modulePreload: true,
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('react')) {
-              return 'vendor-react';
-            }
-            if (id.includes('@radix-ui')) {
-              return 'vendor-radix';
-            }
-            return 'vendor';
-          }
+        manualChunks: {
+          // Create a separate chunk for React to avoid duplicates
+          'vendor-react': ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
+          'vendor-ui': ['@radix-ui/react-accordion', '@radix-ui/react-alert-dialog', '@radix-ui/react-avatar', 
+                        '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-label',
+                        '@radix-ui/react-popover', '@radix-ui/react-select', '@radix-ui/react-slot',
+                        '@radix-ui/react-tabs', '@radix-ui/react-toast', '@radix-ui/react-tooltip']
         }
       }
     },
     chunkSizeWarningLimit: 1000,
   },
   plugins: [
-    react(),
+    react({
+      jsxImportSource: 'react', // Ensure proper React JSX handling
+      devTarget: 'es2022', // Using newer features for dev
+      tsDecorators: false, // No need for decorators
+    }),
     viteCompression({
       algorithm: 'gzip',
       ext: '.gz',
@@ -71,15 +72,15 @@ export default defineConfig(({ mode }) => ({
         name: "Idrees Portfolio",
         short_name: "Idrees",
         description: "Idrees's Portfolio Website",
-        theme_color: "#ffffff",
+        theme_color: "#10B981",
         icons: [
           {
-            src: "pwa-192x192.png",
+            src: "/icons/icon-192x192.png",
             sizes: "192x192",
             type: "image/png"
           },
           {
-            src: "pwa-512x512.png",
+            src: "/icons/icon-512x512.png",
             sizes: "512x512",
             type: "image/png"
           }
@@ -145,10 +146,13 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      'react': path.resolve(__dirname, './node_modules/react'),
+      'react-dom': path.resolve(__dirname, './node_modules/react-dom')
     },
+    dedupe: ['react', 'react-dom'] // Ensure React is deduplicated
   },
   optimizeDeps: {
-    include: ['react', 'react-dom'],
+    include: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
     exclude: ['@vite/client', '@vite/env']
   }
 }));

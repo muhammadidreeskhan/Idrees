@@ -28,7 +28,7 @@ import { Card, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import ParticlesBackground from "../components/ParticlesBackground";
-import { useInView } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 const About = () => {
   const targetRef = useRef<HTMLDivElement>(null);
@@ -207,8 +207,7 @@ const About = () => {
   // Counter animation component
   const CounterAnimation = ({ targetValue }: { targetValue: number | string }) => {
     const [count, setCount] = useState(0);
-    const ref = useRef<HTMLSpanElement>(null);
-    const isInView = useInView(ref);
+    const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
     
     // Extract the numeric part from strings like "5+"
     const numericValue = typeof targetValue === 'string' 
@@ -219,7 +218,7 @@ const About = () => {
     const hasPlus = typeof targetValue === 'string' && targetValue.includes('+');
     
     useEffect(() => {
-      if (isInView) {
+      if (inView) {
         let startTime: number;
         let animationFrameId: number;
         
@@ -248,7 +247,7 @@ const About = () => {
           }
         };
       }
-    }, [isInView, numericValue]);
+    }, [inView, numericValue]);
     
     // Display value with plus sign if original had it
     const displayValue = hasPlus ? `${count}+` : count;

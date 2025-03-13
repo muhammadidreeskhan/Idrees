@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import { 
   ArrowRight, 
@@ -77,10 +78,8 @@ const Index: React.FC = () => {
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
-  const projectsRef = useRef<HTMLDivElement>(null);
-  const postsRef = useRef<HTMLDivElement>(null);
-  const projectsInView = useInView(projectsRef, { once: true, margin: "-100px" });
-  const postsInView = useInView(postsRef, { once: true, margin: "-100px" });
+  const [projectsRef, projectsInView] = useInView({ triggerOnce: true, threshold: 0.1, rootMargin: "-100px" });
+  const [postsRef, postsInView] = useInView({ triggerOnce: true, threshold: 0.1, rootMargin: "-100px" });
 
   return (
     <div className="min-h-screen bg-background">
@@ -103,7 +102,7 @@ const Index: React.FC = () => {
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={projectsInView ? { opacity: 1, y: 0 } : {}}
+              animate={{ opacity: projectsInView ? 1 : 0, y: projectsInView ? 0 : 20 }}
               transition={{ duration: 0.5 }}
               className="text-center mb-12"
             >
@@ -169,7 +168,7 @@ const Index: React.FC = () => {
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={postsInView ? { opacity: 1, y: 0 } : {}}
+              animate={{ opacity: postsInView ? 1 : 0, y: postsInView ? 0 : 20 }}
               transition={{ duration: 0.5 }}
               className="text-center mb-12"
             >
