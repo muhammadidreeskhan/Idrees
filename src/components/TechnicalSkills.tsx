@@ -93,9 +93,9 @@ const categories = ["Frontend", "Backend", "Tools"];
 const TechnicalSkills: React.FC = () => {
   return (
     <section className="py-20 relative overflow-hidden">
-      {/* Background decoration */}
+      {/* Enhanced background decoration */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(40%_40%_at_50%_50%,var(--tw-gradient-from)_0%,var(--tw-gradient-to)_100%)] from-primary/5 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(40%_40%_at_50%_50%,var(--tw-gradient-from)_0%,var(--tw-gradient-to)_100%)] from-purple-500/5 to-transparent" />
       </div>
 
       <div className="container mx-auto px-4">
@@ -105,7 +105,7 @@ const TechnicalSkills: React.FC = () => {
           className="text-center space-y-4 mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold">
-            Technical <span className="text-primary">Skills</span>
+            Technical <span className="bg-gradient-to-r from-sky-400 via-purple-500 to-amber-500 bg-clip-text text-transparent">Skills</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Proficiency in modern web technologies and development tools
@@ -121,7 +121,7 @@ const TechnicalSkills: React.FC = () => {
               className="space-y-6"
             >
               <h3 className="text-2xl font-semibold mb-8">
-                {category} <span className="text-primary">Technologies</span>
+                {category} <span className="bg-gradient-to-r from-sky-400 via-purple-500 to-amber-500 bg-clip-text text-transparent">Technologies</span>
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -133,27 +133,30 @@ const TechnicalSkills: React.FC = () => {
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="group relative p-6 rounded-2xl bg-background/50 backdrop-blur-sm border border-primary/10 hover:border-primary/20 transition-all duration-300"
+                      className="group relative p-6 rounded-2xl bg-background/50 backdrop-blur-sm border border-sky-400/10 hover:border-purple-500/20 transition-all duration-300 hover:shadow-[0_0_15px_rgba(168,85,247,0.15)]"
                     >
-                      {/* Glow effect */}
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/20 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      {/* Enhanced Glow effect */}
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-sky-400/20 via-purple-500/20 to-amber-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       
                       <div className="relative flex items-center space-x-4">
                         <div className="flex-shrink-0">
-                          <img
-                            src={skill.icon}
-                            alt={skill.name}
-                            className="w-12 h-12 group-hover:scale-110 transition-transform duration-300"
-                          />
+                          <div className="relative">
+                            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-sky-400/30 via-purple-500/30 to-amber-500/30 blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <img
+                              src={skill.icon}
+                              alt={skill.name}
+                              className="relative w-12 h-12 group-hover:scale-110 transition-transform duration-300"
+                            />
+                          </div>
                         </div>
                         <div className="flex-grow">
                           <h4 className="text-lg font-semibold mb-2">{skill.name}</h4>
-                          <div className="relative h-2 bg-primary/20 rounded-full overflow-hidden">
+                          <div className="relative h-2 bg-gradient-to-r from-sky-400/20 via-purple-500/20 to-amber-500/20 rounded-full overflow-hidden">
                             <motion.div
                               initial={{ width: 0 }}
                               whileInView={{ width: `${skill.level}%` }}
                               transition={{ duration: 1, ease: "easeOut" }}
-                              className="absolute inset-y-0 left-0 bg-primary rounded-full"
+                              className="absolute inset-y-0 left-0 bg-gradient-to-r from-sky-400 via-purple-500 to-amber-500 rounded-full"
                             />
                           </div>
                           <p className="text-sm text-muted-foreground mt-1">

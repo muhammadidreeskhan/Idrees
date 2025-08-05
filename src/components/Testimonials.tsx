@@ -83,11 +83,11 @@ const Testimonials = () => {
 
   return (
     <section className="py-20 relative overflow-hidden">
-      {/* Background Elements */}
+      {/* Enhanced Background Elements */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-sky-400/5 via-transparent to-amber-500/5" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
       </div>
 
       <div className="container mx-auto px-4">
@@ -98,7 +98,7 @@ const Testimonials = () => {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-sky-400 via-purple-500 to-amber-500 bg-clip-text text-transparent">
             Client Testimonials
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -135,22 +135,23 @@ const Testimonials = () => {
                 }}
                 className="absolute w-full"
               >
-                <div className="bg-background/50 backdrop-blur-lg border border-border/40 rounded-2xl p-8 shadow-lg">
+                <div className="bg-background/50 backdrop-blur-lg border border-sky-400/10 hover:border-purple-500/20 rounded-2xl p-8 shadow-lg hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
                   <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
                     <div className="flex-shrink-0">
                       <div className="relative">
+                        <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-sky-400/50 via-purple-500/50 to-amber-500/50 blur-sm"></div>
                         <img
                           src={testimonials[currentIndex].image}
                           alt={testimonials[currentIndex].name}
-                          className="w-20 h-20 rounded-full object-cover"
+                          className="relative w-20 h-20 rounded-full object-cover"
                         />
-                        <Quote className="absolute -bottom-2 -right-2 w-6 h-6 text-primary bg-background rounded-full p-1" />
+                        <Quote className="absolute -bottom-2 -right-2 w-6 h-6 text-purple-500 bg-background rounded-full p-1" />
                       </div>
                     </div>
                     <div className="flex-grow text-center md:text-left">
                       <div className="flex items-center justify-center md:justify-start gap-1 mb-1">
                         {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                          <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
                         ))}
                       </div>
                       <p className="text-lg mb-4 italic text-muted-foreground">
@@ -175,7 +176,7 @@ const Testimonials = () => {
           <div className="flex justify-center gap-4 mt-8">
             <button
               onClick={() => paginate(-1)}
-              className="p-2 rounded-full bg-background/50 backdrop-blur-sm border border-border/40 text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+              className="p-2 rounded-full bg-background/50 backdrop-blur-sm border border-sky-400/10 text-muted-foreground hover:text-purple-500 hover:border-purple-500/50 transition-colors"
               aria-label="Previous testimonial"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -189,18 +190,17 @@ const Testimonials = () => {
                     setCurrentIndex(index);
                     setIsAutoPlaying(false);
                   }}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    index === currentIndex
-                      ? "w-6 bg-primary"
-                      : "bg-primary/20 hover:bg-primary/40"
-                  }`}
+                  className={`h-2 rounded-full transition-all ${index === currentIndex
+                      ? "w-6 bg-gradient-to-r from-sky-400 via-purple-500 to-amber-500"
+                      : "w-2 bg-purple-500/20 hover:bg-purple-500/40"
+                    }`}
                   aria-label={`Go to testimonial ${index + 1}`}
                 />
               ))}
             </div>
             <button
               onClick={() => paginate(1)}
-              className="p-2 rounded-full bg-background/50 backdrop-blur-sm border border-border/40 text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+              className="p-2 rounded-full bg-background/50 backdrop-blur-sm border border-sky-400/10 text-muted-foreground hover:text-purple-500 hover:border-purple-500/50 transition-colors"
               aria-label="Next testimonial"
             >
               <ChevronRight className="w-5 h-5" />

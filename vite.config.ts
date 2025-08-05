@@ -1,10 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import viteCompression from 'vite-plugin-compression';
-import { VitePWA } from 'vite-plugin-pwa';
+import viteCompression from "vite-plugin-compression";
+import { VitePWA } from "vite-plugin-pwa";
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
     host: "localhost",
@@ -18,61 +17,100 @@ export default defineConfig(({ mode }) => ({
       'Purpose': 'prefetch'
     },
     hmr: {
-      overlay: true
+      overlay: true,
+      clientPort: 3000,
+      host: 'localhost'
     },
     watch: {
       usePolling: false,
       interval: 100
     }
   },
-  build: {
-    target: 'esnext',
-    minify: 'terser',
-    cssMinify: true,
-    cssCodeSplit: true,
-    modulePreload: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          // Create a separate chunk for React to avoid duplicates
-          'vendor-react': ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
-          'vendor-ui': ['@radix-ui/react-accordion', '@radix-ui/react-alert-dialog', '@radix-ui/react-avatar', 
-                        '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-label',
-                        '@radix-ui/react-popover', '@radix-ui/react-select', '@radix-ui/react-slot',
-                        '@radix-ui/react-tabs', '@radix-ui/react-toast', '@radix-ui/react-tooltip']
-        }
-      }
-    },
-    chunkSizeWarningLimit: 1000,
-  },
   plugins: [
-    react({
-      jsxImportSource: 'react', // Ensure proper React JSX handling
-      devTarget: 'es2022', // Using newer features for dev
-      tsDecorators: false, // No need for decorators
-    }),
+    react(),
     viteCompression({
-      algorithm: 'gzip',
-      ext: '.gz',
+      algorithm: "gzip",
+      ext: ".gz",
       threshold: 1024,
       deleteOriginFile: false,
-      filter: /\.(js|css|html|svg|json)$/i,
+      filter: /\.(js|css|html|svg|json)$/i
     }),
     viteCompression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
+      algorithm: "brotliCompress",
+      ext: ".br",
       threshold: 1024,
       deleteOriginFile: false,
-      filter: /\.(js|css|html|svg|json)$/i,
+      filter: /\.(js|css|html|svg|json)$/i
     }),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      registerType: "autoUpdate",
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,webp}"],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "google-fonts-cache",
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365
+                // 1 year
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "gstatic-fonts-cache",
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365
+                // 1 year
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "images-cache",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 30
+                // 30 days
+              }
+            }
+          },
+          {
+            urlPattern: /\.(?:js|css)$/i,
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "static-resources",
+              expiration: {
+                maxEntries: 30,
+                maxAgeSeconds: 60 * 60 * 24 * 7
+                // 1 week
+              }
+            }
+          }
+        ]
+      },
       manifest: {
         name: "Idrees Portfolio",
         short_name: "Idrees",
-        description: "Idrees's Portfolio Website",
-        theme_color: "#10B981",
+        theme_color: "#ffffff",
+        background_color: "#ffffff",
+        display: "standalone",
+        scope: "/",
+        start_url: "/",
         icons: [
           {
             src: "/icons/icon-192x192.png",
@@ -85,74 +123,39 @@ export default defineConfig(({ mode }) => ({
             type: "image/png"
           }
         ]
-      },
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'gstatic-fonts-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          {
-            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'images-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-              }
-            }
-          },
-          {
-            urlPattern: /\.(?:js|css)$/i,
-            handler: 'StaleWhileRevalidate',
-            options: {
-              cacheName: 'static-resources',
-              expiration: {
-                maxEntries: 30,
-                maxAgeSeconds: 60 * 60 * 24 * 7 // 1 week
-              }
-            }
-          }
-        ]
       }
-    })
-  ],
+    }),
+    mode === "development" && (() => ({
+      name: 'component-tagger',
+      transform(code, id) {
+        // Simple placeholder for the componentTagger plugin
+        return code;
+      }
+    }))()
+  ].filter(Boolean),
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      'react': path.resolve(__dirname, './node_modules/react'),
-      'react-dom': path.resolve(__dirname, './node_modules/react-dom')
-    },
-    dedupe: ['react', 'react-dom'] // Ensure React is deduplicated
+      "@": path.resolve(__dirname, "./src")
+    }
   },
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
-    exclude: ['@vite/client', '@vite/env']
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "react-router-dom"],
+          ui: ["@radix-ui/react-tooltip", "@radix-ui/react-toast"],
+          utils: ["framer-motion", "next-themes"]
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000,
+    sourcemap: false,
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    }
   }
 }));

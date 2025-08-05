@@ -33,11 +33,11 @@ const Footer = () => {
 
   return (
     <footer className="relative mt-20">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-primary/5 pointer-events-none" />
+      {/* Enhanced background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-purple-500/5 pointer-events-none" />
       
       {/* Content */}
-      <div className="relative border-t border-primary/10 bg-background/80 backdrop-blur-xl">
+      <div className="relative border-t border-sky-400/10 bg-background/80 backdrop-blur-xl">
         <div className="container mx-auto px-4 py-16">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
             {/* Branding Section */}
@@ -47,8 +47,8 @@ const Footer = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 className="space-y-4"
               >
-                <h3 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary inline-flex items-center gap-2">
-                  IDREES<span className="text-primary animate-pulse">.</span>
+                <h3 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-purple-500 to-amber-500 inline-flex items-center gap-2">
+                  IDREES<span className="text-purple-500 animate-pulse">.</span>
                 </h3>
                 <p className="text-muted-foreground/80 text-lg leading-relaxed">
                   Crafting exceptional digital experiences with modern web technologies.
@@ -57,10 +57,10 @@ const Footer = () => {
 
               <div className="space-y-4">
                 <motion.div 
-                  className="flex items-center gap-3 text-muted-foreground/80 hover:text-primary transition-colors"
+                  className="flex items-center gap-3 text-muted-foreground/80 hover:text-purple-500 transition-colors"
                   whileHover={{ x: 5 }}
                 >
-                  <div className="p-2 rounded-lg bg-primary/5 text-primary">
+                  <div className="p-2 rounded-lg bg-gradient-to-r from-sky-400/5 via-purple-500/5 to-amber-500/5 text-purple-500">
                     <MapPin className="w-4 h-4" />
                   </div>
                   <span>Karachi, Pakistan</span>
@@ -68,10 +68,10 @@ const Footer = () => {
 
                 <motion.a 
                   href="mailto:contactmuhammadidrees@gmail.com"
-                  className="flex items-center gap-3 text-muted-foreground/80 hover:text-primary transition-colors"
+                  className="flex items-center gap-3 text-muted-foreground/80 hover:text-purple-500 transition-colors"
                   whileHover={{ x: 5 }}
                 >
-                  <div className="p-2 rounded-lg bg-primary/5 text-primary">
+                  <div className="p-2 rounded-lg bg-gradient-to-r from-sky-400/5 via-purple-500/5 to-amber-500/5 text-purple-500">
                     <Mail className="w-4 h-4" />
                   </div>
                   <span>contactmuhammadidrees@gmail.com</span>
@@ -85,7 +85,7 @@ const Footer = () => {
                 <h4 className="text-lg font-semibold">
                   Quick Links
                 </h4>
-                <div className="h-1 w-12 bg-gradient-to-r from-primary to-primary/40 rounded-full" />
+                <div className="h-1 w-12 bg-gradient-to-r from-sky-400 via-purple-500 to-amber-500 rounded-full" />
               </div>
               
               <nav className="grid gap-3">
@@ -96,9 +96,9 @@ const Footer = () => {
                   >
                     <Link
                       to={link.href}
-                      className="text-muted-foreground/80 hover:text-primary transition-colors flex items-center gap-3 group"
+                      className="text-muted-foreground/80 hover:text-purple-500 transition-colors flex items-center gap-3 group"
                     >
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors" />
+                      <div className="h-1.5 w-1.5 rounded-full bg-purple-500/40 group-hover:bg-purple-500 transition-colors" />
                       {link.label}
                     </Link>
                   </motion.div>
@@ -112,7 +112,7 @@ const Footer = () => {
                 <h4 className="text-lg font-semibold">
                   Connect With Me
                 </h4>
-                <div className="h-1 w-12 bg-gradient-to-r from-primary to-primary/40 rounded-full" />
+                <div className="h-1 w-12 bg-gradient-to-r from-sky-400 via-purple-500 to-amber-500 rounded-full" />
               </div>
 
               <div className="flex gap-4">
@@ -122,7 +122,7 @@ const Footer = () => {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`p-3 rounded-lg bg-primary/5 ${social.color} transition-all hover:scale-110`}
+                    className={`p-3 rounded-lg bg-gradient-to-r from-sky-400/5 via-purple-500/5 to-amber-500/5 ${social.color} transition-all hover:scale-110 hover:shadow-[0_0_15px_rgba(168,85,247,0.2)]`}
                     whileHover={{ y: -5 }}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -136,11 +136,11 @@ const Footer = () => {
 
           {/* Copyright Section */}
           <motion.div 
-            className="mt-16 pt-8 border-t border-primary/5 text-center text-muted-foreground/60"
+            className="mt-16 pt-8 border-t border-sky-400/5 text-center text-muted-foreground/60"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
           >
-            <p> {new Date().getFullYear()} Muhammad Idrees. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Muhammad Idrees. All rights reserved.</p>
           </motion.div>
         </div>
       </div>

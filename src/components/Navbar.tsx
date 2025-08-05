@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Code, ExternalLink } from "lucide-react";
 import { ModeToggle } from "@/components/theme/mode-toggle";
 
 const Navbar = () => {
@@ -38,45 +38,67 @@ const Navbar = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-      className="fixed top-0 left-0 right-0 z-50 px-4 py-3"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="fixed top-0 left-0 right-0 z-50 px-4 py-4"
     >
-      <nav className={`mx-auto max-w-7xl transition-all duration-300 ${
-        scrolled ? "bg-background/80 shadow-lg backdrop-blur-lg" : "bg-transparent"
-      } rounded-full border border-border/40`}>
+      <nav 
+        className={`mx-auto max-w-7xl transition-all duration-500 ${
+          scrolled 
+            ? "bg-background/80 shadow-lg backdrop-blur-xl border-primary/20" 
+            : "bg-transparent border-transparent"
+        } rounded-2xl border`}
+      >
         <div className="px-6 py-3">
           <div className="flex items-center justify-between">
             <Link
               to="/"
-              className="text-lg md:text-2xl font-bold bg-gradient-to-r from-primary via-purple-500 to-blue-500 bg-clip-text text-transparent"
+              className="relative group"
             >
-              Idrees
+              <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative flex items-center gap-2">
+                <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg">
+                  <Code className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+                  Idrees
+                </span>
+              </div>
             </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-1">
-              {navigation.map((link) => (
-                <motion.div
-                  key={link.href}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="transform-gpu px-3"
-                >
-                  <Link
-                    to={link.href}
-                    className={`relative font-medium transition-colors px-3 py-2 rounded-lg ${
-                      location.pathname === link.href
-                        ? "text-primary bg-primary/10"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                    }`}
+              <div className="mr-4 flex items-center space-x-1">
+                {navigation.map((link) => (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className="transform-gpu px-1"
                   >
-                    {link.name}
-                  </Link>
-                </motion.div>
-              ))}
+                    <Link
+                      to={link.href}
+                      className={`relative font-medium transition-all px-4 py-2 rounded-lg overflow-hidden group ${
+                        location.pathname === link.href
+                          ? "text-white"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {location.pathname === link.href && (
+                        <motion.div 
+                          layoutId="nav-pill"
+                          className="absolute inset-0 bg-gradient-to-r from-primary to-secondary -z-10"
+                          transition={{ type: "spring", duration: 0.5 }}
+                        />
+                      )}
+                      <span className="relative z-10">{link.name}</span>
+                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-primary to-secondary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
               <div className="pl-3">
                 <ModeToggle />
               </div>
@@ -101,37 +123,37 @@ const Navbar = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.2 }}
-            className="mt-3 mx-auto max-w-7xl md:hidden"
+            initial={{ opacity: 0, y: 10, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto" }}
+            exit={{ opacity: 0, y: 10, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="mt-3 mx-auto max-w-7xl md:hidden overflow-hidden"
           >
-            <div className="bg-background/95 backdrop-blur-lg rounded-2xl border border-border/50 shadow-lg overflow-hidden">
+            <div className="bg-background/95 backdrop-blur-xl rounded-2xl border border-primary/20 shadow-lg overflow-hidden">
               <div className="flex flex-col py-2">
-                {navigation.map((link) => (
+                {navigation.map((link, index) => (
                   <motion.div
                     key={link.href}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.2 }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.2, delay: index * 0.05 }}
                   >
                     <Link
                       to={link.href}
                       onClick={() => setIsOpen(false)}
-                      className={`relative px-6 py-2.5 flex items-center text-base font-medium transition-colors ${
+                      className={`relative px-6 py-3 flex items-center text-base font-medium transition-all ${
                         location.pathname === link.href
                           ? "text-primary bg-primary/10"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                          : "text-muted-foreground hover:text-foreground hover:bg-primary/5"
                       }`}
                     >
-                      {link.name}
                       {location.pathname === link.href && (
                         <motion.div
-                          layoutId="mobile-underline"
-                          className="absolute left-0 top-0 bottom-0 w-1 bg-primary"
+                          layoutId="mobile-indicator"
+                          className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-secondary"
                         />
                       )}
+                      <span>{link.name}</span>
                     </Link>
                   </motion.div>
                 ))}

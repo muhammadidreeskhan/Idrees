@@ -76,11 +76,15 @@ const ContactForm = () => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel className="text-foreground/80">Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="John Doe" {...field} />
+                  <Input 
+                    placeholder="John Doe" 
+                    {...field} 
+                    className="border-sky-400/10 focus:border-purple-500/50 bg-background/50 backdrop-blur-sm transition-all duration-300 focus:shadow-[0_0_0_1px_rgba(168,85,247,0.5)]" 
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-400" />
               </FormItem>
             )}
           />
@@ -90,11 +94,16 @@ const ContactForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className="text-foreground/80">Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="john@example.com" type="email" {...field} />
+                  <Input 
+                    placeholder="john@example.com" 
+                    type="email" 
+                    {...field} 
+                    className="border-sky-400/10 focus:border-purple-500/50 bg-background/50 backdrop-blur-sm transition-all duration-300 focus:shadow-[0_0_0_1px_rgba(168,85,247,0.5)]" 
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-400" />
               </FormItem>
             )}
           />
@@ -105,11 +114,15 @@ const ContactForm = () => {
           name="subject"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Subject</FormLabel>
+              <FormLabel className="text-foreground/80">Subject</FormLabel>
               <FormControl>
-                <Input placeholder="Project Inquiry" {...field} />
+                <Input 
+                  placeholder="Project Inquiry" 
+                  {...field} 
+                  className="border-sky-400/10 focus:border-purple-500/50 bg-background/50 backdrop-blur-sm transition-all duration-300 focus:shadow-[0_0_0_1px_rgba(168,85,247,0.5)]" 
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-400" />
             </FormItem>
           )}
         />
@@ -119,15 +132,15 @@ const ContactForm = () => {
           name="message"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Message</FormLabel>
+              <FormLabel className="text-foreground/80">Message</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Tell me about your project..."
-                  className="min-h-[150px] resize-none"
+                  className="min-h-[150px] resize-none border-sky-400/10 focus:border-purple-500/50 bg-background/50 backdrop-blur-sm transition-all duration-300 focus:shadow-[0_0_0_1px_rgba(168,85,247,0.5)]"
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-400" />
             </FormItem>
           )}
         />
@@ -135,7 +148,7 @@ const ContactForm = () => {
         <div className="flex items-center gap-4">
           <Button
             type="submit"
-            className="relative"
+            className="relative bg-gradient-to-r from-sky-400 via-purple-500 to-amber-500 text-white hover:shadow-[0_0_15px_rgba(168,85,247,0.5)] transition-all duration-300"
             disabled={isSubmitting}
           >
             <AnimatePresence mode="wait">

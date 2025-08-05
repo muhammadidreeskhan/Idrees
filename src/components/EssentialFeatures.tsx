@@ -64,7 +64,10 @@ const itemVariants = {
 
 const EssentialFeatures: React.FC = () => {
   return (
-    <section className="py-20 bg-secondary/5">
+    <section className="py-20 relative overflow-hidden">
+      {/* Enhanced background */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-sky-400/5 via-purple-500/5 to-amber-500/5" />
+      
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -78,7 +81,7 @@ const EssentialFeatures: React.FC = () => {
               variants={itemVariants}
               className="text-3xl md:text-4xl font-bold"
             >
-              Core Competencies
+              Core <span className="bg-gradient-to-r from-sky-400 via-purple-500 to-amber-500 bg-clip-text text-transparent">Competencies</span>
             </motion.h2>
             <motion.p 
               variants={itemVariants}
@@ -96,12 +99,12 @@ const EssentialFeatures: React.FC = () => {
               <motion.div
                 key={feature.title}
                 variants={itemVariants}
-                className="bg-background/50 backdrop-blur-sm border border-primary/10 p-6 rounded-2xl hover:border-primary/20 transition-colors duration-300"
+                className="bg-background/50 backdrop-blur-sm border border-sky-400/10 p-6 rounded-2xl hover:border-purple-500/20 transition-colors duration-300 hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] group"
               >
-                <div className="bg-primary/10 w-12 h-12 rounded-xl flex items-center justify-center mb-4 text-primary">
+                <div className="bg-gradient-to-r from-sky-400/10 via-purple-500/10 to-amber-500/10 w-12 h-12 rounded-xl flex items-center justify-center mb-4 text-purple-500 group-hover:scale-110 transition-transform duration-300">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                <h3 className="text-xl font-semibold mb-2 group-hover:text-purple-500 transition-colors">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
               </motion.div>
             ))}

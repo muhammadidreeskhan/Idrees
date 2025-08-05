@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { throttle } from 'lodash';
 
 const AnimatedBackground = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -26,7 +25,7 @@ const AnimatedBackground = () => {
           transform: `translate3d(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px, 0)`,
         }}
       >
-        {/* Gradient Orbs */}
+        {/* Enhanced Gradient Orbs */}
         <motion.div
           animate={{
             scale: [1, 1.2, 1],
@@ -38,7 +37,7 @@ const AnimatedBackground = () => {
             repeat: Infinity,
             ease: "linear",
           }}
-          className="absolute top-1/4 -left-1/4 w-1/2 h-1/2 bg-gradient-to-r from-primary/30 via-purple-500/20 to-blue-500/30 rounded-full blur-3xl will-change-transform"
+          className="absolute top-1/4 -left-1/4 w-1/2 h-1/2 bg-gradient-to-r from-sky-400/30 via-purple-500/20 to-amber-500/30 rounded-full blur-3xl will-change-transform"
         />
         <motion.div
           animate={{
@@ -51,18 +50,18 @@ const AnimatedBackground = () => {
             repeat: Infinity,
             ease: "linear",
           }}
-          className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-l from-primary/30 via-purple-500/20 to-blue-500/30 rounded-full blur-3xl will-change-transform"
+          className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-l from-sky-400/30 via-purple-500/20 to-amber-500/30 rounded-full blur-3xl will-change-transform"
         />
 
-        {/* Grid Pattern */}
+        {/* Enhanced Grid Pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000,transparent)]" />
 
-        {/* Floating Particles */}
+        {/* Enhanced Floating Particles */}
         <div className="absolute inset-0">
-          {[...Array(30)].map((_, i) => (
+          {[...Array(40)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1 h-1 bg-primary/20 rounded-full will-change-transform"
+              className={`absolute w-1 h-1 rounded-full will-change-transform ${i % 3 === 0 ? 'bg-sky-400/30' : i % 3 === 1 ? 'bg-purple-500/30' : 'bg-amber-500/30'}`}
               initial={{
                 x: Math.random() * window.innerWidth,
                 y: Math.random() * window.innerHeight,
@@ -81,7 +80,7 @@ const AnimatedBackground = () => {
           ))}
         </div>
 
-        {/* Noise Texture */}
+        {/* Enhanced Noise Texture */}
         <div className="absolute inset-0 opacity-20 mix-blend-overlay">
           <div className="absolute inset-0 bg-[url('/noise.png')] bg-repeat opacity-20" />
         </div>

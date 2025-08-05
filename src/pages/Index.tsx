@@ -124,7 +124,7 @@ const Index: React.FC = () => {
                   whileHover={{ y: -5 }}
                 >
                   <Link to={project.link}>
-                    <Card className="group overflow-hidden h-full bg-background/50 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-colors">
+                    <Card className="group overflow-hidden h-full bg-background/50 backdrop-blur-sm border-sky-400/10 hover:border-purple-500/20 transition-colors hover:shadow-[0_0_15px_rgba(168,85,247,0.15)]">
                       <CardContent className="p-0">
                         <div className="relative overflow-hidden">
                           <img
@@ -135,7 +135,7 @@ const Index: React.FC = () => {
                           <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </div>
                         <div className="p-6">
-                          <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                          <h3 className="text-xl font-semibold mb-2 group-hover:text-purple-500 transition-colors">
                             {project.title}
                           </h3>
                           <p className="text-muted-foreground mb-4">
@@ -143,12 +143,12 @@ const Index: React.FC = () => {
                           </p>
                           <div className="flex flex-wrap gap-2 mb-4">
                             {project.tech.map((tech, i) => (
-                              <Badge key={i} variant="secondary" className="bg-secondary/10">
+                              <Badge key={i} variant="secondary" className="bg-gradient-to-r from-sky-400/10 via-purple-500/10 to-amber-500/10 text-purple-500">
                                 {tech}
                               </Badge>
                             ))}
                           </div>
-                          <Button variant="ghost" className="group/btn w-full justify-between">
+                          <Button variant="ghost" className="group/btn w-full justify-between hover:text-purple-500">
                             View Project
                             <ArrowUpRight className="w-4 h-4 transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
                           </Button>
@@ -190,15 +190,15 @@ const Index: React.FC = () => {
                   whileHover={{ y: -5 }}
                 >
                   <Link to={post.link}>
-                    <Card className="group h-full bg-background/50 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-colors">
+                    <Card className="group h-full bg-background/50 backdrop-blur-sm border-sky-400/10 hover:border-purple-500/20 transition-colors hover:shadow-[0_0_15px_rgba(168,85,247,0.15)]">
                       <CardContent className="p-6">
                         <div className="flex items-center gap-2 mb-4">
-                          <Badge variant="secondary" className="bg-secondary/10">
+                          <Badge variant="secondary" className="bg-gradient-to-r from-sky-400/10 via-purple-500/10 to-amber-500/10 text-purple-500">
                             <Tag className="w-3 h-3 mr-1" />
                             {post.category}
                           </Badge>
                         </div>
-                        <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                        <h3 className="text-xl font-semibold mb-3 group-hover:text-purple-500 transition-colors line-clamp-2">
                           {post.title}
                         </h3>
                         <p className="text-muted-foreground mb-4 line-clamp-3">
@@ -206,11 +206,11 @@ const Index: React.FC = () => {
                         </p>
                         <div className="flex items-center justify-between text-sm text-muted-foreground">
                           <span className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4" />
+                            <Calendar className="w-4 h-4 text-sky-400" />
                             {post.date}
                           </span>
                           <span className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
+                            <Clock className="w-4 h-4 text-amber-500" />
                             {post.readTime}
                           </span>
                         </div>
